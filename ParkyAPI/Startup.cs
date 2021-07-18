@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ParkyAPI.Data;
+using ParkyAPI.Repository;
+using ParkyAPI.Repository.IRepository;
 
 namespace ParkyAPI
 {
@@ -22,8 +24,12 @@ namespace ParkyAPI
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+
             services.AddDbContext<ParkyDbContext>(
                 options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddScoped<INationalParkRepository, NationalParkRepository>();
+
             services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "ParkyAPI", Version = "v1"}); });
         }
 
