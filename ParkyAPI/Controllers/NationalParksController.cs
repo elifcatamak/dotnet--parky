@@ -79,5 +79,49 @@ namespace ParkyAPI.Controllers
 
             return CreatedAtRoute("GetNationalPark", new {id = nationalPark.Id}, nationalPark);
         }
+
+        [HttpPatch("{id:int}", Name = "UpdateNationalPark")]
+        public IActionResult UpdateNationalPark(int id, [FromBody] NationalParkDto nationalParkDto)
+        {
+            if (nationalParkDto == null || id != nationalParkDto.Id)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var nationalPark = _mapper.Map<NationalPark>(nationalParkDto);
+            var success = _npRepository.UpdateNationalPark(nationalPark);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", $"Something went wrong while updating the record {nationalPark.Name}");
+
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id:int}", Name = "DeleteNationalPark")]
+        public IActionResult DeleteNationalPark(int id)
+        {
+            var exists = _npRepository.NationalParkExists(id);
+
+            if (!exists)
+            {
+                return NotFound();
+            }
+
+            var nationalPark = _npRepository.GetNationalPark(id);
+            var success = _npRepository.DeleteNationalPark(nationalPark);
+
+            if (!success)
+            {
+                ModelState.AddModelError("", $"Something went wrong while deleting the record {nationalPark.Name}");
+
+                return StatusCode(500, ModelState);
+            }
+
+            return NoContent();
+        }
     }
 }
