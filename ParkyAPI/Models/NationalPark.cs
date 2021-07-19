@@ -3,6 +3,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ParkyAPI.Models
 {
+    //Missing xml comment
+#pragma warning disable 1591
     public class NationalPark
     {
         [Key] public int Id { get; set; }
@@ -15,4 +17,5 @@ namespace ParkyAPI.Models
 
         public DateTime EstablishDate { get; set; }
     }
+#pragma warning restore 1591
 }

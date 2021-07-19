@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,14 +29,40 @@ namespace ParkyAPI
         {
             services.AddControllers();
 
-            services.AddDbContext<ParkyDbContext>(
-                options => options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ParkyDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<INationalParkRepository, NationalParkRepository>();
 
             services.AddAutoMapper(typeof(ParkyMappings));
 
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "ParkyAPI", Version = "v1"}); });
+            services.AddSwaggerGen(options =>
+            {
+                options.SwaggerDoc("ParkyOpenAPISpec",
+                    new OpenApiInfo
+                    {
+                        Title = "ParkyAPI",
+                        Version = "1",
+                        Description = "ParkyAPI description",
+                        Contact = new OpenApiContact()
+                        {
+                            Email = "test@test.com",
+                            Name = "TestName",
+                            Url = new Uri("https://www.google.com")
+                        },
+                        License = new OpenApiLicense()
+                        {
+                            Name = "MIT License",
+                            Url = new Uri("https://en.wikipedia.org/wiki/MIT_License")
+                        }
+                    });
+
+                //Reflection
+                var xmlCommentFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlCommentFileFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFileName);
+
+                options.IncludeXmlComments(xmlCommentFileFullPath);
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,8 +71,13 @@ namespace ParkyAPI
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
                 app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ParkyAPI v1"));
+                app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "ParkyAPI v1");
+                    options.RoutePrefix = "";
+                });
             }
 
             //app.UseHttpsRedirection();
