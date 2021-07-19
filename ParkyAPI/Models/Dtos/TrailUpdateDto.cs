@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ParkyAPI.Models.Dtos
 {
-    public class TrailDto
+    public class TrailUpdateDto
     {
         public int Id { get; set; }
 
@@ -13,7 +13,5 @@ namespace ParkyAPI.Models.Dtos
         public Trail.DifficultyType Difficulty { get; set; }
 
         [Required] public int NationalParkId { get; set; }
-
-        public NationalParkDto NationalPark { get; set; }
     }
 }
