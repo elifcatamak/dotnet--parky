@@ -13,6 +13,8 @@ namespace ParkyAPI.Models
 
         [Required] public string State { get; set; }
 
+        public byte[] Image { get; set; }
+
         public DateTime CreateDate { get; set; }
 
         public DateTime EstablishDate { get; set; }
