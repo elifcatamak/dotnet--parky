@@ -1,17 +1,17 @@
-using System;
-using System.IO;
-using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.OpenApi.Models;
+using Microsoft.Extensions.Options;
 using ParkyAPI.Data;
 using ParkyAPI.ParkyMapper;
 using ParkyAPI.Repository;
 using ParkyAPI.Repository.IRepository;
+using Swashbuckle.AspNetCore.SwaggerGen;
 
 namespace ParkyAPI
 {
@@ -37,7 +37,20 @@ namespace ParkyAPI
 
             services.AddAutoMapper(typeof(ParkyMappings));
 
-            services.AddSwaggerGen(options =>
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+                options.ReportApiVersions = true;
+            });
+
+            //Also adds IApiVersionDescriptionProvider service
+            services.AddVersionedApiExplorer(options => options.GroupNameFormat = "'v'VVV");
+
+            services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
+            services.AddSwaggerGen();
+
+            /*services.AddSwaggerGen(options =>
             {
                 options.SwaggerDoc("ParkyOpenAPISpec",
                     new OpenApiInfo
@@ -63,11 +76,11 @@ namespace ParkyAPI
                 var xmlCommentFileFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFileName);
 
                 options.IncludeXmlComments(xmlCommentFileFullPath);
-            });
+            });*/
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IApiVersionDescriptionProvider provider)
         {
             if (env.IsDevelopment())
             {
@@ -76,9 +89,20 @@ namespace ParkyAPI
                 app.UseSwagger();
                 app.UseSwaggerUI(options =>
                 {
-                    options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "ParkyAPI v1");
+                    foreach (var desc in provider.ApiVersionDescriptions)
+                    {
+                        options.SwaggerEndpoint($"/swagger/{desc.GroupName}/swagger.json",
+                            desc.GroupName.ToUpperInvariant());
+                    }
+
                     options.RoutePrefix = "";
                 });
+
+                /*app.UseSwaggerUI(options =>
+                {
+                    options.SwaggerEndpoint("/swagger/ParkyOpenAPISpec/swagger.json", "ParkyAPI v1");
+                    options.RoutePrefix = "";
+                });*/
             }
 
             //app.UseHttpsRedirection();
