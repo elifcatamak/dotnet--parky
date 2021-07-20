@@ -1,3 +1,6 @@
+using System;
+using System.IO;
+using System.Reflection;
 using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -23,6 +26,12 @@ namespace ParkyAPI
                     Version = desc.ApiVersion.ToString()
                 });
             }
+
+            //Reflection
+            var xmlCommentFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlCommentFileFullPath = Path.Combine(AppContext.BaseDirectory, xmlCommentFileName);
+
+            options.IncludeXmlComments(xmlCommentFileFullPath);
         }
     }
 }
