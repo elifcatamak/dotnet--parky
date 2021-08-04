@@ -23,7 +23,9 @@ Trails.
 
 _**Note:**_ Endpoints should not contain verbs according to the RESTful architecture. However, this project is
 implemented as it is shown in the course. The implementation that is shown in the course does not align with RESTful
-architecture. Therefore, I think it should be enhanced accordingly.
+architecture in some parts. Also, some endpoint routes are not built considering the hierarchy of resources. For
+example, reaching a certain Trail could have been implemented such as: `/nationalparks/{nationalParkId}/trails/{trailId}/`.
+Therefore, I think it should be enhanced accordingly.
 
 During development, code first database migration approach is used. This makes it easier for the project to run when it
 is cloned. Also, repository pattern is implemented for data management.
