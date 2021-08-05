@@ -19,6 +19,7 @@ namespace ParkyWeb
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews().AddRazorRuntimeCompilation();
+            services.AddHttpClient();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,11 +44,11 @@ namespace ParkyWeb
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
-            });
+                             {
+                                 endpoints.MapControllerRoute(
+                                                              name: "default",
+                                                              pattern: "{controller=Home}/{action=Index}/{id?}");
+                             });
         }
     }
 }
