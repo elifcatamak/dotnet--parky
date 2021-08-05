@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Net.Mime;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -17,14 +18,40 @@ namespace ParkyWeb.Repository
             _clientFactory = clientFactory;
         }
 
-        public Task<T> GetAsync(string url, int id)
+        public async Task<T> GetAsync(string url, int id)
         {
-            throw new System.NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Get, url + id);
+            var client = _clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
+
+            var jsonStr = await response.Content.ReadAsStringAsync();
+            var obj = JsonConvert.DeserializeObject<T>(jsonStr);
+
+            return obj;
         }
 
-        public Task<IEnumerable<T>> GetAllAsync(string url)
+        public async Task<IEnumerable<T>> GetAllAsync(string url)
         {
-            throw new System.NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Get, url);
+            var client = _clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            if (response.StatusCode != HttpStatusCode.OK)
+            {
+                return null;
+            }
+
+            var jsonStr = await response.Content.ReadAsStringAsync();
+            var objList = JsonConvert.DeserializeObject<IEnumerable<T>>(jsonStr);
+
+            return objList;
         }
 
         public async Task<bool> CreateAsync(string url, T objectToCreate)
@@ -35,27 +62,47 @@ namespace ParkyWeb.Repository
             {
                 //Appending the object to request
                 request.Content = new StringContent(JsonConvert.SerializeObject(objectToCreate),
-                                                    Encoding.UTF8, "application/json");
+                                                    Encoding.UTF8, MediaTypeNames.Application.Json);
             }
             else
             {
                 return false;
             }
 
-            var client = new HttpClient();
+            var client = _clientFactory.CreateClient();
             var response = await client.SendAsync(request);
 
             return response.StatusCode == HttpStatusCode.Created;
         }
 
-        public Task<bool> UpdateAsync(string url, T objectToUpdate)
+        public async Task<bool> UpdateAsync(string url, T objectToUpdate)
         {
-            throw new System.NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Patch, url);
+
+            if (objectToUpdate != null)
+            {
+                request.Content = new StringContent(JsonConvert.SerializeObject(objectToUpdate),
+                                                    Encoding.UTF8, MediaTypeNames.Application.Json);
+            }
+            else
+            {
+                return false;
+            }
+
+            var client = _clientFactory.CreateClient();
+            var response = await client.SendAsync(request);
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
 
-        public Task<bool> DeleteAsync(string url, int id)
+        public async Task<bool> DeleteAsync(string url, int id)
         {
-            throw new System.NotImplementedException();
+            var request = new HttpRequestMessage(HttpMethod.Delete, url + id);
+            var client = _clientFactory.CreateClient();
+
+            var response = await client.SendAsync(request);
+
+            return response.StatusCode == HttpStatusCode.NoContent;
         }
     }
 }
