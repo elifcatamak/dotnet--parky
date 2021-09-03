@@ -15,6 +15,6 @@ namespace ParkyAPI.Models.Dtos
 
         public DateTime CreateDate { get; set; }
 
-        public DateTime EstablishDate { get; set; }
+        public DateTime? EstablishDate { get; set; }
     }
 }

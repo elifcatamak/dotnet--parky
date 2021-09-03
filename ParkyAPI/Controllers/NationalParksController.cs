@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
@@ -86,7 +87,9 @@ namespace ParkyAPI.Controllers
                 return StatusCode(404, ModelState);
             }
 
+            nationalParkDto.CreateDate = DateTime.UtcNow;
             var nationalPark = _mapper.Map<NationalPark>(nationalParkDto);
+
             var success = _npRepository.CreateNationalPark(nationalPark);
 
             if (!success)
@@ -97,8 +100,11 @@ namespace ParkyAPI.Controllers
             }
 
             return CreatedAtRoute("GetNationalPark",
-                new {version = HttpContext.GetRequestedApiVersion()?.ToString(), id = nationalPark.Id},
-                nationalPark);
+                                  new
+                                  {
+                                      version = HttpContext.GetRequestedApiVersion()?.ToString(), id = nationalPark.Id
+                                  },
+                                  nationalPark);
         }
 
         [HttpPatch("{id:int}", Name = "UpdateNationalPark")]

@@ -17,7 +17,7 @@ namespace ParkyAPI.Models
 
         public DateTime CreateDate { get; set; }
 
-        public DateTime EstablishDate { get; set; }
+        public DateTime? EstablishDate { get; set; }
     }
 #pragma warning restore 1591
 }

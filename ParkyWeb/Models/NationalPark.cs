@@ -15,6 +15,6 @@ namespace ParkyWeb.Models
 
         public DateTime CreateDate { get; set; }
 
-        public DateTime EstablishDate { get; set; }
+        public DateTime? EstablishDate { get; set; }
     }
 }

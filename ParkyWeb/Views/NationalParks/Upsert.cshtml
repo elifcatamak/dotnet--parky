@@ -57,9 +57,9 @@
                     @{
                         var estDateValue = "";
 
-                        if (Model.Id != 0)
+                        if (Model.Id != 0 && Model.EstablishDate.HasValue)
                         {
-                            estDateValue = Model.EstablishDate.ToShortDateString();
+                            estDateValue = Model.EstablishDate.Value.ToShortDateString();
                         }
                     }
 
