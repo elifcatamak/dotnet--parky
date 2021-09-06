@@ -82,6 +82,15 @@ namespace ParkyWeb.Controllers
             }
             else
             {
+                var nationalParkList = await _npRepository.GetAllAsync(StaticDetails.NationalParkAPIPath);
+
+                // List is empty, need to populate in order to render the list in the view
+                trailsVm.NationalParkList = nationalParkList.Select(i => new SelectListItem
+                {
+                    Text = i.Name,
+                    Value = i.Id.ToString()
+                });
+
                 return View(trailsVm);
             }
         }

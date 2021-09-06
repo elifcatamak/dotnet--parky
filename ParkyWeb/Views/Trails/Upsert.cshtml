@@ -27,6 +27,7 @@
                     <!-- 1st param is the selected value, 2nd param is the list, 3rd param is default, 4th param is class -->
                     @Html.DropDownListFor(m => m.Trail.NationalParkId, Model.NationalParkList,
                         "-- Please select a park --", new {@class = "form-control"})
+                    <span asp-validation-for="Trail.NationalParkId" class="text-danger"></span>
                 </div>
             </div>
 
