@@ -1,8 +1,79 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model ParkyWeb.Models.ViewModel.IndexVM
 
-<div class="text-center">
-    <h1 class="display-4">Welcome to Parky</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container">
+    <div class="row pt-5">
+        @foreach (var nationalPark in Model.NationalParks)
+        {
+            <div class="container pb-5">
+                <div class="card" style="background-color: #f7f7f9">
+                    <div class="card-header bg-dark text-light mx-0 row container">
+                        <div class="col-12 col-md-6 m-auto">
+                            <h1 class="text-warning my-0">
+                                @nationalPark.Name
+                            </h1>
+                        </div>
+
+                        <div class="col-12 col-md-6 text-md-end m-auto">
+                            <h1 class="text-warning my-0">
+                                State: @nationalPark.State
+                            </h1>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="container rounded p-2">
+                            <div class="row">
+                                <div class="col-12 col-lg-8">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h3 style="color:#bbb9b9">
+                                                Established: @nationalPark.EstablishDate.Value.Year
+                                            </h3>
+                                        </div>
+
+                                        <div class="col-12">
+                                            @if (Model.Trails.Any(t => t.NationalParkId == nationalPark.Id))
+                                            {
+                                                <table class="table table-striped table-bordered">
+                                                    <tr class="table-secondary">
+                                                        <th>Trail</th>
+                                                        <th>Distance</th>
+                                                        <th>Elevation Gain</th>
+                                                        <th>Difficulty</th>
+                                                    </tr>
+
+                                                    @foreach (var trail in Model.Trails.Where(t => t.NationalParkId == nationalPark.Id))
+                                                    {
+                                                        <tr>
+                                                            <td>@trail.Name</td>
+                                                            <td>@trail.Distance miles</td>
+                                                            <td>@trail.Elevation ft</td>
+                                                            <td>@trail.Difficulty</td>
+                                                        </tr>
+                                                    }
+                                                </table>
+                                            }
+                                            else
+                                            {
+                                                <p>No trail exists</p>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-lg-4 m-auto">
+                                    @{
+                                        var base64Str = Convert.ToBase64String(nationalPark.Image);
+                                        var imgSrc = string.Format("data:image/jpg;base64,{0}", base64Str);
+                                    }
+
+                                    <img src="@imgSrc" class="p-2" width="100%"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
 </div>
