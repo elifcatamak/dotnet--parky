@@ -5,7 +5,7 @@
 }
 
 <form method="post" asp-action="Upsert">
-    <div class="row px-2 mx-2 backgroundWhite border">
+    <div class="card border-success mb-3 p-4 rounded">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         @if (Model.Trail.Id != 0)
@@ -14,26 +14,26 @@
             title = "Edit Trail";
         }
 
-        <div class="col-12 p-3">
+        <div class="col-12">
             <h2 class="text-primary">@title</h2>
         </div>
 
         <div class="col-8">
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    National Park
+                    <label class="form-label">National Park</label>
                 </div>
                 <div class="col-8">
                     <!-- 1st param is the selected value, 2nd param is the list, 3rd param is default, 4th param is class -->
                     @Html.DropDownListFor(m => m.Trail.NationalParkId, Model.NationalParkList,
-                        "-- Please select a park --", new {@class = "form-control"})
+                        "-- Please select a park --", new { @class = "form-control form-select" })
                     <span asp-validation-for="Trail.NationalParkId" class="text-danger"></span>
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="Trail.Name"></label>
+                    <label asp-for="Trail.Name" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Trail.Name" class="form-control">
@@ -41,20 +41,20 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="Trail.Difficulty"></label>
+                    <label asp-for="Trail.Difficulty" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     <select asp-for="Trail.Difficulty" asp-items="Html.GetEnumSelectList<Trail.DifficultyType>()"
-                            class="form-control">
+                            class="form-control form-select">
                     </select>
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="Trail.Distance"></label>
+                    <label asp-for="Trail.Distance" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Trail.Distance" class="form-control">
@@ -62,9 +62,9 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="Trail.Elevation"></label>
+                    <label asp-for="Trail.Elevation" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Trail.Elevation" class="form-control">
@@ -72,15 +72,15 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4 offset-4">
-                    <button type="submit" class="btn btn-primary form-control">
+                    <button type="submit" class="btn btn-info form-control">
                         @(Model.Trail.Id == 0 ? "Create" : "Update")
                     </button>
                 </div>
 
                 <div class="col-4">
-                    <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                    <a asp-action="Index" class="btn btn-dark form-control">Back to List</a>
                 </div>
             </div>
         </div>

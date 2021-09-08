@@ -6,7 +6,7 @@
 
 <!-- Added enctype because of image upload -->
 <form method="post" asp-action="Upsert" enctype="multipart/form-data">
-    <div class="row px-2 mx-2 backgroundWhite border">
+    <div class="card border-success mb-3 p-4 rounded">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
         @if (Model.Id != 0)
@@ -15,14 +15,14 @@
             title = "Edit National Park";
         }
 
-        <div class="col-12 p-3">
+        <div class="col-12">
             <h2 class="text-primary">@title</h2>
         </div>
 
         <div class="col-8">
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="Name"></label>
+                    <label asp-for="Name" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Name" class="form-control">
@@ -30,9 +30,9 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="State"></label>
+                    <label asp-for="State" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="State" class="form-control">
@@ -40,18 +40,18 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="Image"></label>
+                    <label asp-for="Image" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     <input asp-for="Image" type="file" id="npImage" name="files" multiple class="form-control">
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4">
-                    <label asp-for="EstablishDate"></label>
+                    <label asp-for="EstablishDate" class="form-label"></label>
                 </div>
                 <div class="col-8">
                     @{
@@ -67,15 +67,15 @@
                 </div>
             </div>
 
-            <div class="form-group row">
+            <div class="form-group row mt-4">
                 <div class="col-4 offset-4">
-                    <button type="submit" class="btn btn-primary form-control">
+                    <button type="submit" class="btn btn-info form-control">
                         @(Model.Id == 0 ? "Create" : "Update")
                     </button>
                 </div>
 
                 <div class="col-4">
-                    <a asp-action="Index" class="btn btn-success form-control">Back to List</a>
+                    <a asp-action="Index" class="btn btn-dark form-control">Back to List</a>
                 </div>
             </div>
         </div>
