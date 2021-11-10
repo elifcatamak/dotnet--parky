@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ParkyAPI.Models;
@@ -50,6 +51,7 @@ namespace ParkyAPI.Controllers
         /// <param name="id">The Id of the national park</param>
         /// <returns></returns>
         [HttpGet("{id:int}", Name = "GetNationalPark")]
+        [Authorize]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(NationalParkDto))]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]

@@ -12,7 +12,7 @@ namespace ParkyAPI.Controllers
     [Route("api/v{version:apiVersion}/trails")]
     [ApiController]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public class TrailsController : Controller
+    public class TrailsController : ControllerBase
     {
         private readonly ITrailRepository _trailRepository;
         private readonly IMapper _mapper;
@@ -120,7 +120,7 @@ namespace ParkyAPI.Controllers
                 return StatusCode(500, ModelState);
             }
 
-            return CreatedAtRoute("GetTrail", new {id = trail.Id}, trail);
+            return CreatedAtRoute("GetTrail", new { id = trail.Id }, trail);
         }
 
         [HttpPatch("{id:int}", Name = "UpdateTrail")]
